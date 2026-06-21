@@ -88,9 +88,12 @@ public class Main {
     /** 执行单个示例 */
     static void runOneExample(String tmpName, String code) throws Exception {
         Files.write(Paths.get(tmpName), code.getBytes("UTF-8"));
+        System.out.println("  [1/3] 读取示例程序");
 
         Lexer l = new Lexer();
         List<Token> toks = l.tokenize(code);
+        System.out.println("      识别到 " + toks.size() + " 个 Token");
+        System.out.println("  [2/3] 语法+语义分析中...");
         LR1Parser p = new LR1Parser();
         @SuppressWarnings("unchecked")
         Map<String, Object> r = p.parse(toks, l.errs);
@@ -182,9 +185,12 @@ public class Main {
             return;
         }
         String code = new String(Files.readAllBytes(f.toPath()), "UTF-8");
+        System.out.println("  [1/3] 读取源文件: " + f.getName());
 
         Lexer l = new Lexer();
         List<Token> toks = l.tokenize(code);
+        System.out.println("      识别到 " + toks.size() + " 个 Token");
+        System.out.println("  [2/3] 语法+语义分析中...");
         LR1Parser p = new LR1Parser();
         @SuppressWarnings("unchecked")
         Map<String, Object> r = p.parse(toks, l.errs);

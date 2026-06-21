@@ -27,6 +27,12 @@ public class LR1Parser {
         err(m, cur != null ? cur.lineno : 0);
     }
 
+
+    // ---- 运行过程输出 ----
+    private void log(String msg) {
+        System.out.println("  [分析] " + msg);
+    }
+
     // ---- Token Helpers ----
     private Token peek() {
         return ti < toks.size() ? toks.get(ti) : null;
@@ -132,6 +138,7 @@ public class LR1Parser {
 
     // ---- Block (no DOT) ----
     private void parseBlock() {
+        log("块分析开始");
         parseConst();
         parseVar();
         parseProc();
@@ -141,6 +148,7 @@ public class LR1Parser {
     // ---- Const Declaration ----
     private void parseConst() {
         if (!mat("CONST")) return;
+        log("解析常量声明");
 
         Token id = peek();
         if (id == null || !sym(id).equals("id")) {
@@ -176,6 +184,7 @@ public class LR1Parser {
     // ---- Var Declaration ----
     private void parseVar() {
         if (!mat("VAR")) return;
+        log("解析变量声明");
         parseIds();
         if (!mat("SEMI")) {
             Token t = peek();
@@ -251,11 +260,11 @@ public class LR1Parser {
 
         String s = sym(t);
         switch (s) {
-            case "id":    parseAssign(); break;
-            case "READ":  parseRead(); break;
-            case "WRITE": parseWrite(); break;
-            case "CALL":  parseCall(); break;
-            case "BEG":
+            case "id":    log("  赋值语句"); parseAssign(); break;
+            case "READ":  log("  读语句"); parseRead(); break;
+            case "WRITE": log("  写语句"); parseWrite(); break;
+            case "CALL":  log("  调用语句"); parseCall(); break;
+            case "BEG":   log("  复合语句");
                 next();
                 parseStmtList();
                 if (!mat("END")) {
@@ -263,8 +272,8 @@ public class LR1Parser {
                     err("Expect END", tt != null ? tt.lineno : 0);
                 }
                 break;
-            case "IF":    parseIf(); break;
-            case "WHILE": parseWhile(); break;
+            case "IF":    log("  条件语句 if"); parseIf(); break;
+            case "WHILE": log("  循环语句 while"); parseWhile(); break;
             case "ODD":   parseCond(); break;
             case "END":   next(); break;
             case "SEMI":  next(); break;
