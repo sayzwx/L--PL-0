@@ -1,0 +1,20 @@
+# Build output
+out/
+*.class
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# IDE files
+.vscode/
+.idea/
+*.iml
+
+# Test artifacts
+test_*.pl0
+_ex*.pl0
+block
+
+# Git
+.git/
